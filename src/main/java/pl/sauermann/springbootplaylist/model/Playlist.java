@@ -27,20 +27,34 @@ public class Playlist implements Playable {
 
     private void playlistPreparation(List<String> result) {
         for (Position position : playList) {
-            if (position.getPlayType() == PlayType.SEQUENTIALLY) {
+            sequentiallyTypePlaylistPreparation(result, position);
+            loopTypePlaylistPreparation(result, position);
+            randomTypePlaylistPreparation(result, position);
+            result.add("------");
+        }
+    }
+
+    private void sequentiallyTypePlaylistPreparation(List<String> result, Position position) {
+        if (position.getPlayType() == PlayType.SEQUENTIALLY) {
+            position.getPositionList()
+                    .forEach(item -> result.add(item.toString()));
+        }
+    }
+
+    private void loopTypePlaylistPreparation(List<String> result, Position position) {
+        if (position.getPlayType() == PlayType.LOOP) {
+            for (int i = 0; i < 5; i++) {
                 position.getPositionList()
                         .forEach(item -> result.add(item.toString()));
-            } else if (position.getPlayType() == PlayType.LOOP) {
-                for (int i = 0; i < 5; i++) {
-                    position.getPositionList()
-                            .forEach(item -> result.add(item.toString()));
-                }
-            } else if (position.getPlayType() == PlayType.RANDOM) {
-                List<SimplePosition> temporary = new ArrayList<>(position.getPositionList());
-                Collections.shuffle(temporary);
-                temporary.forEach(item -> result.add(item.toString()));
             }
-            result.add("------");
+        }
+    }
+
+    private void randomTypePlaylistPreparation(List<String> result, Position position) {
+        if (position.getPlayType() == PlayType.RANDOM) {
+            List<SimplePosition> temporary = new ArrayList<>(position.getPositionList());
+            Collections.shuffle(temporary);
+            temporary.forEach(item -> result.add(item.toString()));
         }
     }
 }
